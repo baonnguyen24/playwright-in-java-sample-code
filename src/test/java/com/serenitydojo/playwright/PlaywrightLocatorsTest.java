@@ -1,11 +1,12 @@
 package com.serenitydojo.playwright;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 
-public class ASimplePlaywrightTest {
+public class PlaywrightLocatorsTest {
 
     private static Playwright playwright;
     private static Browser browser;
@@ -35,22 +36,19 @@ public class ASimplePlaywrightTest {
         playwright.close();
     }
 
+    @DisplayName("Locating an element by Text contents")
     @Test
-    void shouldShowThePageTitle() {
+    void byText() {
         page.navigate("https://practicesoftwaretesting.com/");
-        String title = page.title();
-
-        Assertions.assertTrue(title.contains("Practice Software Testing"));
+        page.getByText("Bolt Cutters").click();
+        PlaywrightAssertions.assertThat(page.getByText("MightyCraft Hardware")).isVisible();
     }
 
+    @DisplayName("Locating an element by Text contents")
     @Test
-    void shouldSearchByKeyword() {
+    void byAltText() {
         page.navigate("https://practicesoftwaretesting.com/");
-        page.locator("[data-test=search-query]").fill("Pliers");
-        page.locator("[data-test=search-submit]").click();
-
-        int matchingSearchResults = page.locator(".card").count();
-
-        Assertions.assertTrue(matchingSearchResults > 0);
+        page.getByAltText("Combination Pliers").click();
+        PlaywrightAssertions.assertThat(page.getByText("ForgeFlex Tools")).isVisible();
     }
 }
